@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "spotmicro.ino",
+    "port": "COM3",
+    "programmer": "arduino:avrisp"
+}
