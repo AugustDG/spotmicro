@@ -1,5 +1,5 @@
 # spotmicro
-Arduino code repo for my build of the Spot Micro project, more specifically Michael's Kubina version!
+Arduino code repo for my build of the Spot Micro project, more specifically Michael's Kubina version! I am using 2 ultrasonic sensors (not implemented as of yet), the PCA 9685 PWM driver, 12 MG995 servos and an Arduino UNO!
 
 You can find it [here](https://github.com/michaelkubina/SpotMicroESP32) :)
 
