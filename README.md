@@ -9,6 +9,8 @@ You should always calibrate your servos and change the PWM value ranges accordin
 
 If you're ever finding the new folders/files bizarre, it's because I'm trying out the Arduino IDE 2.0!
 
+The important file is the *.ino* one, so that shouldn't change 👌🏽
+
 ## Servo Arrangement
 
 I've arranged the servos in the below fashion, the [🧑🏽] emoji is the front and the [🍑] is the rear of the bot :)
