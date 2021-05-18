@@ -5,6 +5,8 @@ You can find the original repo with all the instructions and model files [here](
 
 Otherwise, have fun reading over my code! Can't say it's perfect, but it's for a school project and if you have any suggestions don't hesitate to raise an issue or send a pull request :D
 
+I am also developing a companion app (in WPF) that goes with this code to control the bot, in due time I'll put it up on Github and have a link to it here :)
+
 You should always calibrate your servos and change the PWM value ranges accordingly :)
 
 If you're ever finding the new folders/files bizarre, it's because I'm trying out the Arduino IDE 2.0!
@@ -32,6 +34,6 @@ I've arranged the servos in the below fashion, the [🧑🏽] emoji is the front
 | Uniform movement from all servos | ✔ | ✔ |
 | Relative 2D Coordinates -> Degrees (IK) | ✔ | ❌ |
 | Step Routine (take a step without falling) | ✔ | ❌ |
-| Walking Routine (walks various steps without falling) | ❌ | ❌ |
+| Walking Routine (walks various steps without falling) | ✔ | ❌ |
 
 MIT Licensed :)
