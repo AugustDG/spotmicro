@@ -5,7 +5,7 @@ You can find the original repo with all the instructions and model files [here](
 
 Otherwise, have fun reading over my code! Can't say it's perfect, but it's for a school project and if you have any suggestions don't hesitate to raise an issue or send a pull request :D
 
-I am also developing a companion app (in WPF) that goes with this code to control the bot, in due time I'll put it up on Github and have a link to it here :)
+I am also developing a companion app (in WPF) that goes with this code to control the bot [here](https://github.com/AugustDG/spotmicro-companion-windows) :)
 
 You should always calibrate your servos and change the PWM value ranges accordingly :)
 
