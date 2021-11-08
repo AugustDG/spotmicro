@@ -13,6 +13,11 @@ If you're ever finding the new folders/files bizarre, it's because I'm trying ou
 
 The important file is the *.ino* one, so that shouldn't change 👌🏽
 
+## Dependencies
+
+* [NewPing](https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home)
+* [Adafruit PWM Servo Driver](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library)
+
 ## Servo Arrangement
 
 I've arranged the servos in the below fashion, the [🧑🏽] emoji is the front and the [🍑] is the rear of the bot :)
@@ -25,6 +30,7 @@ I've arranged the servos in the below fashion, the [🧑🏽] emoji is the front
 | 3 | 4|
 
 🍑
+
 
 ## State of Things
 

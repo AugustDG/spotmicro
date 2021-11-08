@@ -1,5 +1,5 @@
+#include <NewPing.h>
 #include <Adafruit_PWMServoDriver.h>
-#include <HC_SR04.h>
 
 #define SERVO_FREQ 50      // Analog servos run at ~50 Hz updates
 #define PROCESSING_DELAY 0 // how much delay between loop calls (in ms)
@@ -7,7 +7,7 @@
 // lengths of each leg segment
 #define UPPER_SEG_LENGTH 10
 #define LOWER_SEG_LENGTH 12
-#define STEP_SIZE 25 // how small is each degree step (larger it is, the smoother, but slower it is)
+#define STEP_SIZE 30 // how small is each degree step (larger it is, the smoother, but slower it is)
 
 // basic struct to hold 2d coordinates
 struct Vector2D {
@@ -16,8 +16,13 @@ struct Vector2D {
 
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-HC_SR04 sonicR(10, 11, 0);
-HC_SR04 sonicL(12, 13, 0);
+NewPing sonicR(9, 10);
+NewPing sonicL(12, 13);
+
+unsigned int pingSpeed = 200; // How frequently are we going to send out a ping (in milliseconds). 50ms would be 20 times a second.
+unsigned long pingTimer;     // Holds the next ping time.
+uint16_t distR;
+uint16_t distL;
 
 bool finishedMoving = false; // the bot has finished moving
 bool hasRoutine = false;     // is following a routine
@@ -32,16 +37,16 @@ uint8_t routineCycle = 0; //where, in the number of routine cycles, are we?
 // end, mid, shoulder;
 
 // when every angle is at max
-const int16_t maxPwmVals[] = {230, 330, 345, 
-                          310, 165, 270,
-                          300, 165, 325, 
-                          235, 330, 260};
+const int16_t maxPwmVals[] = {220, 350, 335, 
+                          310, 235, 260,
+                          310, 265, 325, 
+                          245, 315, 260};
 
 // when every angle is at min
-const int16_t minPwmVals[] = {460, 135, 265, 
-                          70,  340, 350,
-                          70,  330, 245, 
-                          465, 140, 340};
+const int16_t minPwmVals[] = {430, 165, 275, 
+                          70,  415, 340,
+                          70,  440, 245, 
+                          465, 125, 340};
 
 // upper bounds of each servo's degree range
 const int16_t servoDegRanges[] = {120, 90, 10, 120, 90, 10,
@@ -78,26 +83,20 @@ struct Vector2D forwardRoutine[4][4] = {{{-3, 11}, {-3, 9}, {2, 9}, {2, 11}}, //
                                         {{-3, 13}, {-3, 9}, {2, 9}, {2, 13}}, //back legs
                                         {{-3, 13}, {-3, 13}, {-3, 13}, {-3, 13}}};
 
-struct Vector2D backRoutine[4][4] = {{{2, 10}, {2, 9}, {-3, 9}, {-3, 10}}, //front legs
-                                     {{2, 10}, {2, 10}, {2, 10}, {2, 10}}, 
-                                     {{2, 13}, {2, 9}, {-3, 13}, {-3, 13}}, //back legs
+struct Vector2D backRoutine[4][4] = {{{2, 11}, {2, 9}, {-3, 9}, {-3, 11}}, //front legs
+                                     {{2, 11}, {2, 11}, {2, 11}, {2, 11}}, 
+                                     {{2, 13}, {2, 7}, {-3, 7}, {-3, 13}}, //back legs
                                      {{2, 13}, {2, 13}, {2, 13}, {2, 13}}};
 
 struct Vector2D (*currentRoutine)[4][4];
 
 void setup() {
-  // ultrasonic sensors setup
-  //sonicL.begin();
-  //sonicR.begin();
-
   // open a serial connection and print starting string
   Serial.begin(9600);
   while (!Serial) continue;
   Serial.println("Spot Booting...");
 
-  // ultrasonic sensors start checking
-  //sonicL.start();
-  //sonicR.start();
+  pingTimer = millis(); //start now
 
   // pwm driver setup
   pwm.begin();
@@ -272,18 +271,33 @@ Vector2D CoordToAngles(Vector2D *vec, int servoNumb) {
   return res;
 }
 
-void loop() {
-  /*if (sonicR.isFinished() && sonicL.isFinished())
+void echoCheck(){
+  if (sonicR.check_timer())
   {
-    // for general info data, a 0 is appended at the beginning of the message
-    Serial.print("0R: ");
-    Serial.print(sonicR.getRange());
-    Serial.print(" / L: ");
-    Serial.println(sonicL.getRange());
+    distR = sonicR.ping_result / US_ROUNDTRIP_CM;
+  }
 
-    sonicL.start();
-  sonicR.start();
-  }*/
+  if (sonicL.check_timer())
+  {
+    distL = sonicL.ping_result / US_ROUNDTRIP_CM;
+  }
+}
+
+int test = 0;
+
+void loop() {
+  if (millis() >= pingTimer)
+  {
+    pingTimer += pingSpeed;
+    sonicR.ping_timer(echoCheck);
+    sonicL.ping_timer(echoCheck);
+
+    //if the serial message starts with a 0, it's ping information
+    Serial.print("0R");
+    Serial.print(distR);
+    Serial.print(" L");
+    Serial.println(distL);
+  }
 
   int servosComplete = 0; // holds how many servos reached their final destination
 
